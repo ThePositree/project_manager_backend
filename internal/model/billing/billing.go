@@ -72,6 +72,7 @@ func (b *Billing) PrevState() error {
 		return nil
 	case StateCompleted:
 		b._state = StateLayout
+		return nil
 	}
 	return fmt.Errorf("%s is %w", b._state, ErrInvalidState)
 }
@@ -98,3 +99,49 @@ func (b *Billing) SetBriefInfo(username string) (BriefInfo, error) {
 // completed
 // )
 type State string
+
+type ErrInvalidBillingId struct {
+	BillingId string
+}
+
+func (e ErrInvalidBillingId) Error() string {
+	return fmt.Sprintf("%s is invalid user id", e.BillingId)
+}
+
+func ValidateBillingId(billingId string) error {
+	if _, err := uuid.Parse(billingId); err != nil {
+		return ErrInvalidBillingId{BillingId: billingId}
+	}
+	return nil
+}
+
+type DTO interface {
+	GetId() string
+	GetUserId() string
+	GetState() string
+	GetUsername() string
+}
+
+func ToModelFromDTO(dto DTO) (Billing, error) {
+	dtoState := dto.GetState()
+	state, err := ParseState(dtoState)
+	if err != nil {
+		return Billing{}, fmt.Errorf("%s is %w", dtoState, ErrInvalidState)
+	}
+	userId := dto.GetUserId()
+	err = user.ValidateUserId(userId)
+	if err != nil {
+		return Billing{}, err
+	}
+	id := dto.GetId()
+	err = ValidateBillingId(id)
+	if err != nil {
+		return Billing{}, err
+	}
+	return Billing{
+		Id:        id,
+		UserId:    userId,
+		_state:    state,
+		_username: dto.GetUsername(),
+	}, nil
+}

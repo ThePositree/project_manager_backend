@@ -32,3 +32,20 @@ func ValidateUserId(userId string) error {
 	}
 	return nil
 }
+
+type DTO interface {
+	GetId() string
+	GetTelegramUN() string
+}
+
+func ToModelFromDTO(dto DTO) (User, error) {
+	id := dto.GetId()
+	err := ValidateUserId(id)
+	if err != nil {
+		return User{}, err
+	}
+	return User{
+		Id:         id,
+		TelegramUN: dto.GetTelegramUN(),
+	}, nil
+}
