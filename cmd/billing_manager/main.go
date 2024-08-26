@@ -57,7 +57,7 @@ func main() {
 	billingManaging := billing_managing_std.New(userRepo, billingRepo)
 	userManaging := user_managing_std.New(userRepo)
 
-	ctrl := http_controller.New(logger, billingManaging, userManaging, "3000", "qwerty")
+	ctrl := http_controller.New(logger, billingManaging, userManaging, "80", "qwerty")
 
 	go func() {
 		<-ctx.Done()

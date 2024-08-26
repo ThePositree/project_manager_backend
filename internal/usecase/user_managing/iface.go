@@ -7,7 +7,10 @@ import (
 	"github.com/ThePositree/billing_manager/internal/model/user"
 )
 
-var ErrExistingUser = errors.New("user is existing")
+var (
+	ErrExistingUser = errors.New("user is existing")
+	ErrUserNotFound = errors.New("user not found")
+)
 
 type UserManaging interface {
 	GetByTelegramUN(ctx context.Context, telegramUN string) (user.User, error)

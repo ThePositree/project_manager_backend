@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	ErrNoUser    = errors.New("no data")
-	ErrNoBilling = errors.New("no data")
+	ErrUserNotFound    = errors.New("user not found")
+	ErrBillingNotFound = errors.New("billing not found")
 )
 
 type BillingManaging interface {

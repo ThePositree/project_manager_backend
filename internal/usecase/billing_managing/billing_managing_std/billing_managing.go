@@ -20,7 +20,7 @@ type billingManaging struct {
 func (b billingManaging) Create(ctx context.Context, userId string) (model_billing.Billing, error) {
 	user, err := b.userRepo.Get(ctx, userId)
 	if errors.Is(b.userRepo.GetNoDataError(), err) {
-		return model_billing.Billing{}, billing_managing.ErrNoUser
+		return model_billing.Billing{}, billing_managing.ErrUserNotFound
 	}
 	if err != nil {
 		return model_billing.Billing{}, fmt.Errorf("getting user by id from repository: %w", err)
@@ -51,7 +51,7 @@ func (b billingManaging) GetAll(ctx context.Context) ([]model_billing.Billing, e
 func (b billingManaging) GetAllByUserId(ctx context.Context, userId string) ([]model_billing.Billing, error) {
 	user, err := b.userRepo.Get(ctx, userId)
 	if errors.Is(b.userRepo.GetNoDataError(), err) {
-		return []model_billing.Billing{}, billing_managing.ErrNoUser
+		return []model_billing.Billing{}, billing_managing.ErrUserNotFound
 	}
 	if err != nil {
 		return []model_billing.Billing{}, fmt.Errorf("getting user by id from repository: %w", err)
@@ -68,7 +68,7 @@ func (b billingManaging) GetAllByUserId(ctx context.Context, userId string) ([]m
 func (b billingManaging) GetById(ctx context.Context, id string) (model_billing.Billing, error) {
 	billing, err := b.billingRepo.Get(ctx, id)
 	if errors.Is(b.billingRepo.GetNoDataError(), err) {
-		return model_billing.Billing{}, billing_managing.ErrNoBilling
+		return model_billing.Billing{}, billing_managing.ErrBillingNotFound
 	}
 	if err != nil {
 		return model_billing.Billing{}, fmt.Errorf("getting billing by id from repository: %w", err)
@@ -79,7 +79,7 @@ func (b billingManaging) GetById(ctx context.Context, id string) (model_billing.
 func (b billingManaging) NextState(ctx context.Context, id string) (model_billing.Billing, error) {
 	billing, err := b.billingRepo.Get(ctx, id)
 	if errors.Is(b.billingRepo.GetNoDataError(), err) {
-		return model_billing.Billing{}, billing_managing.ErrNoBilling
+		return model_billing.Billing{}, billing_managing.ErrBillingNotFound
 	}
 	if err != nil {
 		return model_billing.Billing{}, fmt.Errorf("getting billing by id from repository: %w", err)
@@ -100,7 +100,7 @@ func (b billingManaging) NextState(ctx context.Context, id string) (model_billin
 func (b billingManaging) PrevState(ctx context.Context, id string) (model_billing.Billing, error) {
 	billing, err := b.billingRepo.Get(ctx, id)
 	if errors.Is(b.billingRepo.GetNoDataError(), err) {
-		return model_billing.Billing{}, billing_managing.ErrNoBilling
+		return model_billing.Billing{}, billing_managing.ErrBillingNotFound
 	}
 	if err != nil {
 		return model_billing.Billing{}, fmt.Errorf("getting billing by id from repository: %w", err)
@@ -121,7 +121,7 @@ func (b billingManaging) PrevState(ctx context.Context, id string) (model_billin
 func (b billingManaging) SetBriefInfo(ctx context.Context, id string, username string) (model_billing.Billing, error) {
 	billing, err := b.billingRepo.Get(ctx, id)
 	if errors.Is(b.billingRepo.GetNoDataError(), err) {
-		return model_billing.Billing{}, billing_managing.ErrNoBilling
+		return model_billing.Billing{}, billing_managing.ErrBillingNotFound
 	}
 	if err != nil {
 		return model_billing.Billing{}, fmt.Errorf("getting billing by id from repository: %w", err)

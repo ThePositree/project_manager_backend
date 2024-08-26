@@ -44,7 +44,7 @@ func PatchBillingNextState(billingManaging billing_managing.BillingManaging, log
 		}
 
 		billing, err := billingManaging.NextState(ctx, billingId)
-		if errors.Is(billing_managing.ErrNoBilling, err) {
+		if errors.Is(billing_managing.ErrBillingNotFound, err) {
 			if err := WriteResponse(
 				w,
 				http.StatusBadRequest,
@@ -114,7 +114,7 @@ func PatchBillingPrevState(billingManaging billing_managing.BillingManaging, log
 		}
 
 		billing, err := billingManaging.PrevState(ctx, billingId)
-		if errors.Is(billing_managing.ErrNoBilling, err) {
+		if errors.Is(billing_managing.ErrBillingNotFound, err) {
 			if err := WriteResponse(
 				w,
 				http.StatusBadRequest,

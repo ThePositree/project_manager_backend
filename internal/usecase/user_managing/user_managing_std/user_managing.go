@@ -47,6 +47,9 @@ func (u userManaging) GetAll(ctx context.Context) ([]model_user.User, error) {
 
 func (u userManaging) GetByTelegramUN(ctx context.Context, telegramUN string) (model_user.User, error) {
 	user, err := u.userRepo.GetByTelegramUN(ctx, telegramUN)
+	if errors.Is(u.userRepo.GetNoDataError(), err) {
+		return model_user.User{}, user_managing.ErrUserNotFound
+	}
 	if err != nil {
 		return model_user.User{}, fmt.Errorf("getting user by id from repository: %w", err)
 	}
@@ -55,6 +58,9 @@ func (u userManaging) GetByTelegramUN(ctx context.Context, telegramUN string) (m
 
 func (u userManaging) GetById(ctx context.Context, id string) (model_user.User, error) {
 	user, err := u.userRepo.Get(ctx, id)
+	if errors.Is(u.userRepo.GetNoDataError(), err) {
+		return model_user.User{}, user_managing.ErrUserNotFound
+	}
 	if err != nil {
 		return model_user.User{}, fmt.Errorf("getting user by id from repository: %w", err)
 	}
@@ -63,6 +69,9 @@ func (u userManaging) GetById(ctx context.Context, id string) (model_user.User, 
 
 func (u userManaging) Delete(ctx context.Context, id string) (model_user.User, error) {
 	user, err := u.userRepo.Delete(ctx, id)
+	if errors.Is(u.userRepo.GetNoDataError(), err) {
+		return model_user.User{}, user_managing.ErrUserNotFound
+	}
 	if err != nil {
 		return model_user.User{}, fmt.Errorf("deleting user from repository: %w", err)
 	}

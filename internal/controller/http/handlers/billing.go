@@ -35,7 +35,7 @@ func GetBilling(billingManaging billing_managing.BillingManaging, logger zerolog
 
 		userID := queryParams.Get("user_id")
 		billings, err := billingManaging.GetAllByUserId(ctx, userID)
-		if errors.Is(billing_managing.ErrNoUser, err) {
+		if errors.Is(billing_managing.ErrUserNotFound, err) {
 			if err := WriteResponse(
 				w,
 				http.StatusBadRequest,
@@ -110,7 +110,7 @@ func PostBilling(billingManaging billing_managing.BillingManaging, logger zerolo
 		}
 
 		billing, err := billingManaging.Create(ctx, billingInfo.UserId)
-		if errors.Is(billing_managing.ErrNoUser, err) {
+		if errors.Is(billing_managing.ErrUserNotFound, err) {
 			if err := WriteResponse(
 				w,
 				http.StatusBadRequest,
@@ -156,7 +156,7 @@ func PatchBilling(billingManaging billing_managing.BillingManaging, logger zerol
 		}
 
 		billing, err := billingManaging.GetById(ctx, billingId)
-		if errors.Is(billing_managing.ErrNoBilling, err) {
+		if errors.Is(billing_managing.ErrBillingNotFound, err) {
 			if err := WriteResponse(
 				w,
 				http.StatusBadRequest,
