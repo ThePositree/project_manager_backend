@@ -20,7 +20,7 @@ type handlerInfo struct {
 }
 
 type http_controller struct {
-	port            string
+	port            int
 	logger          zerolog.Logger
 	billingManaging billing_managing.BillingManaging
 	userManaging    user_managing.UserManaging
@@ -89,7 +89,7 @@ func (hc http_controller) Start(ctx context.Context) {
 		r.Handle(handlerInfo.path, handlerInfo.handler).Methods(handlerInfo.method)
 	}
 	httpServer := &http.Server{
-		Addr:    fmt.Sprintf(":%s", hc.port),
+		Addr:    fmt.Sprintf(":%d", hc.port),
 		Handler: r,
 		BaseContext: func(_ net.Listener) context.Context {
 			return ctx
@@ -110,7 +110,7 @@ func New(
 	logger zerolog.Logger,
 	billingManaging billing_managing.BillingManaging,
 	userManaging user_managing.UserManaging,
-	port string,
+	port int,
 	adminPassword string,
 ) http_controller {
 	return http_controller{

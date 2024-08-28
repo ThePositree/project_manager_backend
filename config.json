@@ -1,0 +1,8 @@
+{
+  "mongo_uri": "mongodb://localhost:27017",
+  "database": "billing_manager",
+  "user_collection": "users",
+  "billing_collection": "billings",
+  "admin_password": "qwerty",
+  "http_port": 3000
+}
